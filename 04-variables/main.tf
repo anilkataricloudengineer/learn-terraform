@@ -62,3 +62,10 @@ output "o3" {
 output "o4" {
   value = var.v3["cloud"]
 }
+
+# So far we are hard coding the values in variables, Most times those come as input
+
+variable "v10" {}
+output "o10" {
+  value = var.v10
+}
