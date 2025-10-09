@@ -28,6 +28,11 @@ variable "components" {
      vm_size = "Standard_DS1_v2"
    }
 
+   cart = {
+     name = "cart"
+     vm_size = "Standard_DS1_v2"
+   }
+
    mysql = {
      name = "mysql"
      vm_size = "Standard_DS1_v2"
@@ -45,6 +50,11 @@ variable "components" {
 
    rabbitmq = {
      name = "rabbitmq"
+     vm_size = "Standard_DS1_v2"
+   }
+
+   redis = {
+     name = "redis"
      vm_size = "Standard_DS1_v2"
    }
 
