@@ -5,8 +5,8 @@ resource "local_file" "foo" {
 }
 
 variable "demo" {
-  default = [
+  default = {
     ORANGE = "orange"
     BANANA = "banana"
-  ]
+  }
 }
