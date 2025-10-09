@@ -1,3 +1,15 @@
+# resource "null_resource" "demo" {
+#   count = 10
+# }
+
+
 resource "null_resource" "demo" {
-  count = 10
+  count = length(var.demo)
+}
+
+variable "demo" {
+  default = [
+  "apple",
+  "banana"
+  ]
 }
