@@ -13,7 +13,8 @@ resource "null_resource" "demo" {
 
 variable "demo" {
   default = [
-  "apple",
-  "banana"
+    "orange",
+    "apple",
+    "banana"
   ]
 }
