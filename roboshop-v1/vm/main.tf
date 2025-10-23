@@ -33,10 +33,7 @@ resource "azurerm_virtual_machine" "main" {
   delete_os_disk_on_termination = true
 
   storage_image_reference {
-    publisher = "Canonical"
-    offer     = "0001-com-ubuntu-server-jammy"
-    sku       = "22_04-lts"
-    version   = "latest"
+    id = "/subscriptions/52cd5f2c-0d28-4429-b80d-950089f20b98/resourceGroups/project-setup-1/providers/Microsoft.Compute/galleries/CustomPractice/images/Customimage/versions/1.0.0"
   }
 
   storage_os_disk {
