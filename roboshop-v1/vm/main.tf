@@ -79,7 +79,7 @@ resource "azurerm_virtual_machine" "main" {
     disable_password_authentication = false
   }
   tags = {
-    component = var.componentt
+    component = var.component
   }
 
   # provisioner "remote-exec" {
