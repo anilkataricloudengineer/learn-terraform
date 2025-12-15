@@ -85,7 +85,7 @@ resource "azurerm_virtual_machine" "main" {
 }
 
 resource "azurerm_dns_a_record" "main" {
-  name                = "${var.component}-dev.anilcloudengineer.online"
+  name                = "${var.component}-dev"
   zone_name           = "anilcloudengineer.online"
   resource_group_name = data.azurerm_resource_group.example.name
   ttl                 = 10
