@@ -1,3 +1,14 @@
+resource "azurerm_public_ip" "main" {
+  name                = "${var.component}-ip"
+  location              = data.azurerm_resource_group.example.location
+  resource_group_name   = data.azurerm_resource_group.example.name
+  allocation_method   = "Static"
+
+  tags = {
+    component = var.component
+  }
+}
+
 resource "azurerm_network_interface" "main" {
   name                = "${var.component}-nic"
   location            = data.azurerm_resource_group.example.location
@@ -38,19 +49,16 @@ resource "azurerm_network_interface_security_group_association" "main" {
   network_security_group_id = azurerm_network_security_group.main.id
 }
 
-
-resource "azurerm_public_ip" "main" {
-  name                = "${var.component}-ip"
-  location              = data.azurerm_resource_group.example.location
-  resource_group_name   = data.azurerm_resource_group.example.name
-  allocation_method   = "Static"
-
-  tags = {
-    component = var.component
-  }
+resource "azurerm_dns_a_record" "main" {
+  name                = "${var.component}-dev"
+  zone_name           = "anilcloudengineer.online"
+  resource_group_name = data.azurerm_resource_group.example.name
+  ttl                 = 10
+  records             = [azurerm_network_interface.main.private_ip_address]
 }
 
 resource "azurerm_virtual_machine" "main" {
+  depends_on            = [azurerm_network_interface_security_group_association.main, azurerm_dns_a_record.main]
   name                  = var.component
   location              = data.azurerm_resource_group.example.location
   resource_group_name   = data.azurerm_resource_group.example.name
@@ -84,28 +92,22 @@ resource "azurerm_virtual_machine" "main" {
 
 }
 
-resource "azurerm_dns_a_record" "main" {
-  name                = "${var.component}-dev"
-  zone_name           = "anilcloudengineer.online"
-  resource_group_name = data.azurerm_resource_group.example.name
-  ttl                 = 10
-  records             = [azurerm_network_interface.main.private_ip_address]
-}
-
 resource "null_resource" "ansible"{
 
-  provisioner "remote-exec" {
+    depends_on = [azurerm_virtual_machine.main]
 
-    connection {
-      type     = "ssh"
-      user     = "testadmin"
-      password = "Password1234!"
-      host     = azurerm_public_ip.main.ip_address
+    provisioner "remote-exec" {
+
+      connection {
+        type     = "ssh"
+        user     = "testadmin"
+        password = "Password1234!"
+        host     = azurerm_public_ip.main.ip_address
+      }
+      inline = [
+        "sudo dnf install python3.12-pip -y",
+        "sudo pip3.12 install ansible",
+        "ansible-pull -i localhost, -U https://github.com/anilkataricloudengineer/roboshop-ansible roboshop.yml -e app_name=${var.component} -e ENV=dev"
+      ]
     }
-    inline = [
-      "sudo dnf install python3.12-pip -y",
-      "sudo pip3.12 install ansible",
-      "ansible-pull -i localhost, -U https://github.com/anilkataricloudengineer/roboshop-ansible roboshop.yml -e app_name=${var.component} -e ENV=dev"
-    ]
-  }
 }
