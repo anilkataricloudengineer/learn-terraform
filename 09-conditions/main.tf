@@ -5,6 +5,6 @@ output "test" {
 }
 # these conditions with combination of loops can be used to determine whether a resource to run or not.
 
-
-
-
+resource "null_resource" "test" {
+  count = var.a > 10 ? 1 : 0
+}
