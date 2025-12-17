@@ -14,3 +14,7 @@ variable "token" {}
 data "vault_kv_secret" "secret_data" {
   path = "test/demo-ssh"
 }
+
+output "data" {
+  value = data.vault_kv_secret.secret_data
+}
